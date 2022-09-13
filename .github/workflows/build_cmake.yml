@@ -20,4 +20,4 @@ jobs:
           config: ${{ github.workspace }}/mosquitto.conf
           container-name: 'tochtli_test'
       - name: Test
-        run: mosquitto_pub -h localhost -p 1883 -t hutzli -m "bah"
+        run: mosquitto_pub -d -h localhost -p 1883 -t hutzli -m "bah"
