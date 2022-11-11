@@ -10,11 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Upload package
+      - name: Upload package 1
         uses: actions/upload-artifact@v3
         with:
           name: binaries
-          path: build/rexsapi-*.zip
+          path: build/rexsapi-darwin-1.0.0.zip
+      - name: Upload package 2
+        uses: actions/upload-artifact@v3
+        with:
+          name: binaries
+          path: build/rexsapi-linux-1.0.0.zip
 
   create_release:
     name: Create release
