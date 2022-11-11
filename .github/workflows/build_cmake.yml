@@ -42,4 +42,6 @@ jobs:
           tag: ${{ github.ref }}
           rm: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          files: rexsapi-darwin-1.0.0.zip
+          files: |
+            ./rexsapi-darwin-1.0.0.zip/rexsapi-darwin-1.0.0.zip
+
