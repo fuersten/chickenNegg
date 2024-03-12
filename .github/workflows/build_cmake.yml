@@ -33,12 +33,7 @@ jobs:
     needs: [build-stuff,build-more-stuff]
     steps:
       - uses: actions/checkout@v4
-      - name: Display structure of downloaded files before download
-        run: ls -R
-      - uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-      - name: Display structure of downloaded files after download
+      - name: Display structure of folders
         run: ls -R
       - name: Create release
         id: create_release
@@ -57,4 +52,4 @@ jobs:
           rm: true
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            ./artifacts/binaries-*/rexsapi-*.zip
+            ./build/rexsapi-*.zip
