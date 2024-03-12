@@ -37,19 +37,9 @@ jobs:
         run: ls -R
       - name: Create release
         id: create_release
-        uses: thomaseizinger/create-release@1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
           name: ${{ github.ref_name }}
           body: Some text
-          prerelease: false
-          draft: false
-      - name: Upload release artifacts
-        uses: pyTooling/Actions/releaser@r0
-        with:
-          tag: ${{ github.ref }}
-          rm: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          files: |
-            ./build/rexsapi-*.zip
+          artifacts: "./build/rexsapi-*.zip"
+          removeArtifacts: true
