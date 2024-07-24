@@ -27,8 +27,8 @@ jobs:
       - name: Print
         run: echo $VERSION
     outputs:
-      version: $VERSION
-      latest: $LATEST
+      version: "$VERSION"
+      latest: "$LATEST"
 
   #  build-stuff:
   #    runs-on: ubuntu-latest
@@ -53,7 +53,7 @@ jobs:
   create_release:
     name: Create release
     if: startsWith( github.ref, 'refs/tags/') && endsWith(github.ref, '-latest')
-    runs-on: [ubuntu-latest, "${{ needs.get-rel-name.outputs.version }}"]
+    runs-on: [ubuntu-latest]
     # needs: [build-stuff, build-more-stuff]
     needs: [build-more-stuff, get-rel-name]
     steps:
