@@ -53,7 +53,7 @@ jobs:
   create_release:
     name: Create release
     if: startsWith( github.ref, 'refs/tags/') && endsWith(github.ref, '-latest')
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, "${{ needs.get-rel-name.outputs.version }}"]
     # needs: [build-stuff, build-more-stuff]
     needs: [build-more-stuff, get-rel-name]
     steps:
