@@ -15,14 +15,15 @@ jobs:
         with:
           script: |
             const ref='${{ github.ref }}'
-            console.log("REF " + ref)
             if (ref.startsWith('refs/tags/') && ref.endsWith('-latest')) {
               const version=/^refs\/tags\/(.+)-latest/.exec(ref)[1]
               core.exportVariable('VERSION', version)
               core.exportVariable('LATEST', true)
-            } else {
+            } else if (ref.startsWith('refs/tags/')) {
               const version=/^refs\/tags\/(.+)/.exec(ref)[1]
               core.exportVariable('VERSION', version)
+              core.exportVariable('LATEST', false)
+            } else {
               core.exportVariable('LATEST', false)
             }
       - name: Set outputs
