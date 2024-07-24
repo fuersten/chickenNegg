@@ -43,7 +43,7 @@ jobs:
             }
       - name: Print
         run: |
-          echo "${{steps.variables.outputs.VERSION}}"
+          echo "$VERSION"
 
   #  build-stuff:
   #    runs-on: ubuntu-latest
