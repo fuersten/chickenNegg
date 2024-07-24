@@ -12,11 +12,15 @@ jobs:
       - name: Extract name
         if: startsWith( github.ref, 'refs/tags/') && endsWith(github.ref, '-latest')
         run: |
-          echo "Latest " + ${GITHUB_REF:10}
+          version=$(echo ${GITHUB_REF:10}| cut -d- -f1)
+          echo "version=$version" >> $GITHUB_OUTPUT
       - name: Extract name
         if: startsWith( github.ref, 'refs/tags/') && !endsWith(github.ref, '-latest')
         run: |
-          echo ${GITHUB_REF:10}
+          echo "version=${GITHUB_REF:10}" >> $GITHUB_OUTPUT
+      - name: Print name
+        run: |
+          echo $version
 
   #  build-stuff:
   #    runs-on: ubuntu-latest
