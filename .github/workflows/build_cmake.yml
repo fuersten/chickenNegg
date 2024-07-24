@@ -24,8 +24,11 @@ jobs:
               core.exportVariable('VERSION', version)
               core.exportVariable('LATEST', false)
             }
+      - name: Print
+        run: echo $VERSION
     outputs:
       version: $VERSION
+      latest: $LATEST
 
   #  build-stuff:
   #    runs-on: ubuntu-latest
@@ -56,7 +59,7 @@ jobs:
     steps:
       - name: Print
         run: |
-          echo "${{ needs.get-rel-name.outputs.version }}"
+          echo "Version ${{ needs.get-rel-name.outputs.version }}"
       - uses: actions/checkout@v4
       - name: Display structure of folders
         run: ls -R
