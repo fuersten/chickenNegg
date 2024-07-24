@@ -6,23 +6,6 @@ on:
   release:
 
 jobs:
-  check-rel-name:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Extract name
-        id: extract_latest
-        if: startsWith( github.ref, 'refs/tags/') && endsWith(github.ref, '-latest')
-        run: |
-          version=$(echo ${GITHUB_REF:10}| cut -d- -f1)
-          echo "version=$version" >> $GITHUB_OUTPUT
-          echo $version
-      - name: Extract name
-        id: extract
-        if: startsWith( github.ref, 'refs/tags/') && !endsWith(github.ref, '-latest')
-        run: |
-          echo "version=${GITHUB_REF:10}" >> $GITHUB_OUTPUT
-          echo $version
-
   get-rel-name:
     runs-on: ubuntu-latest
     steps:
@@ -41,9 +24,8 @@ jobs:
               core.exportVariable('VERSION', version)
               core.exportVariable('LATEST', false)
             }
-      - name: Print
-        run: |
-          echo "$VERSION"
+    outputs:
+      version: $VERSION
 
   #  build-stuff:
   #    runs-on: ubuntu-latest
@@ -70,8 +52,11 @@ jobs:
     if: startsWith( github.ref, 'refs/tags/') && endsWith(github.ref, '-latest')
     runs-on: ubuntu-latest
     # needs: [build-stuff, build-more-stuff]
-    needs: [build-more-stuff]
+    needs: [build-more-stuff, get-rel-name]
     steps:
+      - name: Print
+        run: |
+          echo "${{ needs.get-rel-name.outputs.version }}"
       - uses: actions/checkout@v4
       - name: Display structure of folders
         run: ls -R
