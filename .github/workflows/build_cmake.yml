@@ -64,6 +64,7 @@ jobs:
       - name: Print
         run: |
           echo "Version ${{ needs.get-rel-name.outputs.version }}"
+          echo ${{ needs.get-rel-name.outputs.latest }}
       - uses: actions/checkout@v4
       - name: Display structure of folders
         run: ls -R
