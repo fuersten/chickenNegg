@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Variables
         id: variables
-        uses: actions/github-script@v3
+        uses: actions/github-script@v7
         with:
           script: |
             const ref='${{ github.ref }}'
