@@ -24,11 +24,15 @@ jobs:
               core.exportVariable('VERSION', version)
               core.exportVariable('LATEST', false)
             }
-      - name: Print
-        run: echo $VERSION
+      - name: Set outputs
+        id: vars
+        run: |
+          echo $VERSION
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "latest=$LATEST" >> $GITHUB_OUTPUT
     outputs:
-      version: "$VERSION"
-      latest: "$LATEST"
+      version: ${{ steps.vars.outputs.version }}
+      latest: ${{ steps.vars.outputs.latest }}
 
   #  build-stuff:
   #    runs-on: ubuntu-latest
