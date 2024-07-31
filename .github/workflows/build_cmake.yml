@@ -67,14 +67,26 @@ jobs:
         run: |
           echo "Version ${{ needs.get-rel-name.outputs.version }}"
           echo ${{ needs.get-rel-name.outputs.latest }}
-      - uses: actions/checkout@v4
-      - name: Display structure of folders
-        run: ls -R
-      - name: Create release
-        id: create_release
-        uses: ncipollo/release-action@v1
-        with:
-          name: ${{ github.ref_name }}
-          body: Some text
-          artifacts: "./build/rexsapi-*.zip"
-          removeArtifacts: true
+      - name: Set tags
+        if: startsWith( github.ref, 'refs/tags/')
+        id: tags
+        run: |
+          if [ ${{ needs.get-rel-version.outputs.latest }} = true ]; then
+            echo "value=registry.neutronedge.com:5001/evp:evp-v${{ needs.get-rel-version.outputs.version }},registry.neutronedge.com:5001/evp:latest" >> $GITHUB_OUTPUT
+          else
+            echo "value=registry.neutronedge.com:5001/evp:evp-v${{ needs.get-rel-version.outputs.version }}" >> $GITHUB_OUTPUT
+          fi
+      - name: Print tags
+        run: |
+          echo "TAGS ${{ steps.tags.outputs.value }}"
+      # - uses: actions/checkout@v4
+      # - name: Display structure of folders
+      #   run: ls -R
+      # - name: Create release
+      #   id: create_release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     name: ${{ github.ref_name }}
+      #     body: Some text
+      #     artifacts: "./build/rexsapi-*.zip"
+      #     removeArtifacts: true
