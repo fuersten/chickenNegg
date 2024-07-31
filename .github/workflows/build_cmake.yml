@@ -7,21 +7,24 @@ on:
 
 jobs:
   get-rel-version:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Variables
         id: variables
         uses: actions/github-script@v7
         with:
           script: |
-            const ref='${{ github.ref }}'
-            if (ref.startsWith('refs/tags/') && ref.endsWith('-latest')) {
-              const version=/^refs\/tags\/(.+)-latest/.exec(ref)[1]
+            const ref='${{ github.ref_name }}'
+            const is_tag = '${{ github.ref_type }}' === "tag"
+            if (is_tag && ref.endsWith('-latest')) {
+              const version=/evp-v(.+)-latest/.exec(ref)[1]
               core.exportVariable('VERSION', version)
+              core.exportVariable('RELEASE_NAME', 'v' + version)
               core.exportVariable('LATEST', true)
-            } else if (ref.startsWith('refs/tags/')) {
-              const version=/^refs\/tags\/(.+)/.exec(ref)[1]
+            } else if (is_tag) {
+              const version=/evp-v(.+)/.exec(ref)[1]
               core.exportVariable('VERSION', version)
+              core.exportVariable('RELEASE_NAME', 'v' + version)
               core.exportVariable('LATEST', false)
             } else {
               core.exportVariable('LATEST', false)
@@ -29,11 +32,15 @@ jobs:
       - name: Set outputs
         id: vars
         run: |
-          echo $VERSION
+          echo "version=$VERSION"
+          echo "latest=$LATEST"
+          echo "release_name=$RELEASE_NAME"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "latest=$LATEST" >> $GITHUB_OUTPUT
+          echo "release_name=$RELEASE_NAME" >> $GITHUB_OUTPUT
     outputs:
       version: ${{ steps.vars.outputs.version }}
+      release_name: ${{ steps.vars.outputs.release_name }}
       latest: ${{ steps.vars.outputs.latest }}
 
   #  build-stuff:
@@ -65,8 +72,8 @@ jobs:
     steps:
       - name: Print
         run: |
-          echo "Version ${{ needs.get-rel-name.outputs.version }}"
-          echo ${{ needs.get-rel-name.outputs.latest }}
+          echo "Version ${{ needs.get-rel-version.outputs.version }}"
+          echo ${{ needs.get-rel-version.outputs.latest }}
       - name: Set tags
         if: startsWith( github.ref, 'refs/tags/')
         id: tags
