@@ -69,7 +69,7 @@ jobs:
           echo "Version ${{ needs.get-rel-version.outputs.version }}"
           echo ${{ needs.get-rel-version.outputs.latest }}
       - name: Evaluate
-        if:  ${{ needs.get-rel-version.outputs.latest }}
+        if:  ${{ needs.get-rel-version.outputs.latest }} = true
         run: |
           echo "Running latest" >> $GITHUB_OUTPUT
       - name: Set tags
